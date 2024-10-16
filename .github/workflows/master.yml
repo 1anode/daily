@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - name: Setup Debug Information
-        run: echo "::debug::Triggered by ref = ${{github.ref}}"
+        run: echo "::debug::Triggered by ref = ${{ github.ref }}"
 
       - name: Checkout Code
-        uses: actions/checkout@v4 # Pastikan menggunakan versi terbaru
+        uses: actions/checkout@v4
         with:
           persist-credentials: true
           fetch-depth: 0
@@ -34,19 +34,27 @@ jobs:
 
       - name: Setup Git Configuration
         run: |
-          git config user.email "vilakerlas@gmail.com.com"
+          git config user.email "vilakerlas@gmail.com"
           git config user.name "1anode"
 
       - name: Prepare Commit
+        id: commit
         run: |
           commit_messages=("Update: 🚀" "Sync: 🌐" "Refine: 🔍" "Reboot: 🔄" "Enhance: ✨" "Overhaul: 🔧" "Transform: 🔮" "Elevate: ⬆️" "Boost: ⚡" "Polish: ✏️")
           random_msg=${commit_messages[$RANDOM % ${#commit_messages[@]}]}
           git add rain.txt
-          git commit -m "$random_msg - $current_time" || echo "No changes to commit." && exit 1
+          if git commit -m "$random_msg - $current_time"; then
+            echo "Commit successful!"
+            echo "::set-output name=commit_msg::$random_msg - $current_time"
+          else
+            echo "No changes to commit."
+            exit 0  # Exit gracefully if there's nothing to commit
+          fi
 
       - name: Git Auto Commit
+        if: steps.commit.outputs.commit_msg != ''
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
-          commit_message: "$random_msg - $current_time"
+          commit_message: "${{ steps.commit.outputs.commit_msg }}"
           directory: '.'
           github_token: ${{ secrets.TOKE }}
