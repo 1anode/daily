@@ -41,7 +41,7 @@ jobs:
         run: |
           commit_messages=("Update: 🚀" "Sync: 🌐" "Refine: 🔍" "Reboot: 🔄" "Enhance: ✨" "Overhaul: 🔧" "Transform: 🔮" "Elevate: ⬆️" "Boost: ⚡" "Polish: ✏️")
           random_msg=${commit_messages[$RANDOM % ${#commit_messages[@]}]}
-          git add TIMESTAMP.txt
+          git add rain.txt
           git commit -m "$random_msg - $current_time" || echo "No changes to commit." && exit 1
 
       - name: Git Auto Commit
