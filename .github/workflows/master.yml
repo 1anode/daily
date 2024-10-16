@@ -34,8 +34,8 @@ jobs:
 
       - name: Setup Git Configuration
         run: |
-          git config user.email "maladarsih@gmail.com"
-          git config user.name "winnode"
+          git config user.email "vilakerlas@gmail.com.com"
+          git config user.name "1anode"
 
       - name: Prepare Commit
         run: |
